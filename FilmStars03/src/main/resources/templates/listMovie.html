@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta charset="utf-8" />
+<title>Películas</title>
+<meta name="generator" content="Bootply" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+	crossorigin="anonymous" />
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+	integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+	integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+	crossorigin="anonymous"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" />
+
+<link href='https://fonts.googleapis.com/css?family=Be Vietnam'
+	rel='stylesheet' />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css">
+
+<style>
+body {
+	width: auto !important;
+	max-width: 100% !important;
+	font-family: 'Be Vietnam' !important;
+}
+
+@media all and (min-width: 992px) {
+	.navbar .nav-item .dropdown-menu {
+		display: block;
+		opacity: 0;
+		visibility: hidden;
+		transition: .3s;
+		margin-top: 0;
+	}
+	.navbar .nav-item:hover .nav-link {
+		color: #fff;
+	}
+	.navbar .dropdown-menu.fade-down {
+		top: 80%;
+		transform: rotateX(-75deg);
+		transform-origin: 0% 0%;
+	}
+	.navbar .dropdown-menu.fade-up {
+		top: 180%;
+	}
+	.navbar .nav-item:hover .dropdown-menu {
+		transition: .3s;
+		opacity: 1;
+		visibility: visible;
+		top: 100%;
+		transform: rotateX(0deg);
+	}
+}
+</style>
+</head>
+
+<body style="background-color: rgba(34, 34, 34, 1); color: white;">
+	<div th:replace="fragments/headerAdmin :: header"></div>
+	<div class="container">
+		
+		<p style="font-weight: bold; text-align:center ;font-size: 70px; color: white;">Películas</p>
+		
+		<form th:action="@{/pelicula/registrar(opt=${opt})}" method="post"
+			th:object="${movie}">
+			<div class="form-group">
+				<label for="idpet" style="display: none;">ID:</label> <input type="text" style="display: none;"
+					class="form-control" th:field="*{idMovie}" readonly></input>
+
+				<div class="form-group">
+					<label for="nombre">DIRECTOR:</label> <select class="form-control"
+						th:field="*{director.idDirector}">
+						<option th:each="d: ${listDirectors}" th:value="${d.idDirector}"
+							th:text="${d.nameDirector}"
+							th:selected="(${d.idDirector} == *{director.idDirector})">
+						</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">NOMBRE:</label> <input type="text"
+						class="form-control" th:field="*{nameMovie}" id="nombre" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('nameMovie')}" th:errors="*{nameMovie}"></small>
+						<small class="form-text text-danger" th:if="${msjName}" th:text="${msjName}"></small>
+				</div>
+				
+				<div class="form-group">
+					<label for="nombre">STOCK:</label> <input type="number"
+						class="form-control" th:field="*{stockMovie}" id="stock" th:errorclass="'form-control alert-danger'" required></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('stockMovie')}" th:errors="*{stockMovie}"></small>
+				</div>
+				
+				<div class="form-group">
+					<label for="nombre">PRECIO:</label> <input type="number" step=".01"
+						class="form-control" th:field="*{priceMovie}" id="price" th:errorclass="'form-control alert-danger'" required></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('priceMovie')}" th:errors="*{priceMovie}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">SINOPSIS:</label> <input type="text"
+						class="form-control" th:field="*{synopsisMovie}" id="sinopsis" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('synopsisMovie')}" th:errors="*{synopsisMovie}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">ARGUMENTO:</label> <input type="text"
+						class="form-control" th:field="*{plotMovie}" id="argumento" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('plotMovie')}" th:errors="*{plotMovie}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">PORTADA</label> <input type="text"
+						class="form-control" th:field="*{coverMovie}" id="portada" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('coverMovie')}" th:errors="*{coverMovie}"></small>
+						<small class="form-text text-danger" th:if="${msjCover}" th:text="${msjCover}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">IMAGEN</label> <input type="text"
+						class="form-control" th:field="*{imgMovie}" id="imagen" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('imgMovie')}" th:errors="*{imgMovie}"></small>
+						<small class="form-text text-danger" th:if="${msjImg}" th:text="${msjImg}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">IMAGEN1</label> <input type="text"
+						class="form-control" th:field="*{imgCarrMovie1}" id="imagen1" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('imgCarrMovie1')}" th:errors="*{imgCarrMovie1}"></small>
+						<small class="form-text text-danger" th:if="${msjImg1}" th:text="${msjImg1}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">IMAGEN2</label> <input type="text"
+						class="form-control" th:field="*{imgCarrMovie2}" id="imagen2" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('imgCarrMovie2')}" th:errors="*{imgCarrMovie2}"></small>
+						<small class="form-text text-danger" th:if="${msjImg2}" th:text="${msjImg2}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="nombre">IMAGEN3</label> <input type="text"
+						class="form-control" th:field="*{imgCarrMovie3}" id="imagen3" th:errorclass="'form-control alert-danger'"></input><small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('imgCarrMovie3')}" th:errors="*{imgCarrMovie3}"></small>
+						<small class="form-text text-danger" th:if="${msjImg3}" th:text="${msjImg3}"></small>
+				</div>
+
+			</div>
+			<button type="submit" class="btn btn-success">
+				<span class="bi bi-plus-circle"></span> Grabar
+			</button>
+			<p th:if="${mensaje}" th:text="${mensaje}" class="form-text text-danger"></p>
+			
+		</form>
+
+		<br>
+
+
+		<form id="myform" th:action="@{/pelicula/buscar}"
+			th:object="${moviebusqueda}">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+
+					<input type="text" class="form-control" th:field="*{nameMovie}"
+						placeholder="Ingrese un nombre de pelicula para buscar"
+						id="nombre"/>
+					<br>
+					<div align="left">
+						<button type="submit" class="btn btn-primary"><span class="bi bi-search"></span> Buscar</button>
+						<a th:href="@{/pelicula/listar}" class="btn btn-secondary"><span class="bi bi-eraser"></span> Limpiar</a>
+					</div>
+					<br>
+					<div class="table-responsive">
+					<table class="table table-dark table-bordered table-hover table-striped"
+						style="color: white; background-color: transparent" id="tab_logic">
+						<thead>
+							<tr>
+								<th class="text-center">CODIGO</th>
+								<th class="text-center">DIRECTOR</th>
+								<th class="text-center">NOMBRE</th>
+								<th class="text-center">STOCK</th>
+								<th class="text-center">PRECIO</th>
+								<th class="text-center">PORTADA</th>
+								<th class="text-center">IMAGEN</th>
+								<th class="text-center">IMAGEN1</th>
+								<th class="text-center">IMAGEN2</th>
+								<th class="text-center">IMAGEN3</th>
+								<th class="text-center">OPERACION</th>
+								<th class="text-center">OPERACION</th>
+								<th class="text-center">OPERACION</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="m: ${listMovies}">
+								<td align="center" th:text="${m.idMovie}"></td>
+								<td align="center" th:text="${m.director.nameDirector}"></td>
+								<td align="center" th:text="${m.nameMovie}"></td>
+								<td align="center" th:text="${m.stockMovie}"></td>
+								<td align="center" th:text="${m.priceMovie}"></td>
+								<td align="center"><img th:src="${m.coverMovie}" width="50"
+									height="50" alt="logo" align="middle"></img></td>
+								<td align="center"><img th:src="${m.imgMovie}" width="50"
+									height="50" alt="logo" align="middle"></img></td>
+								<td align="center"><img th:src="${m.imgCarrMovie1}"
+									width="50" height="50" alt="logo" align="middle"></img></td>
+								<td align="center"><img th:src="${m.imgCarrMovie2}"
+									width="50" height="50" alt="logo" align="middle"></img></td>
+								<td align="center"><img th:src="${m.imgCarrMovie3}"
+									width="50" height="50" alt="logo" align="middle"></img></td>
+								<td align="center"><a class="btn btn-danger"
+									th:href="@{/pelicula/eliminar?id=}+${m.idMovie}"><span class="bi bi-trash"></span> Eliminar</a></td>
+								<td align="center"><a class="btn btn-warning"
+									th:href="@{'/pelicula/modificar/'}+${m.idMovie}"><span class="bi bi-pen"></span> Modificar</a></td>
+								<td align="center"><a class="btn btn-warning"
+									th:href="@{'/pelicula/suministrar/'}+${m.idMovie}"><span class="bi bi-pen"></span> Suministrar</a></td>
+							</tr>
+						</tbody>
+					</table>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>
